@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Volopay | Onboarding Command Center</title>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#18243a;--muted:#738099;--line:#e5eaf2;
+  --navy:#172554;--blue:#4263eb;--teal:#0f9d91;--mint:#dff8f2;--purple:#805ad5;
+  --amber:#f2a93b;--red:#e45b68;--shadow:0 12px 32px rgba(26,43,78,.07);
+}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
+.sidebar{background:linear-gradient(165deg,#172554,#233b78 70%,#176b79);color:#fff;padding:26px 17px;display:flex;flex-direction:column;gap:28px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 10px;font-weight:800;letter-spacing:.3px;font-size:17px}
+.brand-mark{height:34px;width:34px;border-radius:11px;background:#55dfc1;color:#15304d;display:grid;place-items:center;font-weight:900}
+.brand small{display:block;font-size:10px;letter-spacing:2px;opacity:.7;font-weight:600;margin-top:3px}
+.nav-label{font-size:10px;letter-spacing:1.8px;color:#b8c6e7;padding:0 12px;margin:4px 0 8px}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{display:flex;align-items:center;gap:12px;border:0;color:#d9e3fa;background:transparent;padding:12px;border-radius:12px;text-align:left;font-size:13px}
+.nav button.active,.nav button:hover{background:rgba(255,255,255,.15);color:#fff}
+.nav .ico{width:20px;text-align:center;font-size:17px}
+.side-bottom{margin-top:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:15px;border-radius:15px;font-size:12px;line-height:1.6}
+.side-bottom strong{display:block;margin-bottom:5px}
+main{min-width:0}
+.topbar{height:78px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;gap:20px}
+.crumb{font-size:12px;color:var(--muted)}.crumb strong{color:var(--ink)}
+.top-actions{display:flex;align-items:center;gap:14px}.search{border:1px solid var(--line);background:#f9fbfe;border-radius:10px;padding:10px 13px;width:220px;font-size:12px;outline:none}
+.icon-btn{border:1px solid var(--line);background:#fff;border-radius:10px;width:38px;height:38px}
+.avatar{height:36px;width:36px;border-radius:50%;display:grid;place-items:center;background:#dff8f2;color:#137d75;font-weight:800;font-size:12px}
+.content{padding:30px 34px 40px;max-width:1600px;margin:auto}
+.eyebrow{font-size:11px;letter-spacing:1.7px;text-transform:uppercase;color:var(--teal);font-weight:800}
+.heading-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:23px}
+h1{font-size:27px;letter-spacing:-.7px;margin:7px 0 8px}.sub{color:var(--muted);font-size:13px;line-height:1.6;margin:0}
+.primary{border:0;background:var(--blue);color:white;padding:11px 16px;border-radius:10px;font-weight:700;font-size:12px;box-shadow:0 5px 14px #4263eb2c}
+.secondary{border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 14px;border-radius:10px;font-weight:700;font-size:12px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:20px}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.metric-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:600}
+.metric-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:16px}
+.metric strong{display:block;font-size:29px;letter-spacing:-.7px;margin:15px 0 7px}
+.metric-foot{font-size:11px;color:var(--muted)}.positive{color:#0e9c79;font-weight:800}
+.grid-main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.9fr);gap:18px;margin-bottom:18px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:21px;box-shadow:var(--shadow);min-width:0}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}
+.panel h2{font-size:15px;margin:0;letter-spacing:-.2px}.panel-desc{font-size:11px;color:var(--muted);margin-top:5px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:6px 9px;font-size:10px;font-weight:800;white-space:nowrap}
+.pill.green{background:#e0f8ef;color:#087c62}.pill.amber{background:#fff2d9;color:#a46608}.pill.blue{background:#e8edff;color:#3553c7}.pill.red{background:#ffeaed;color:#b93649}.pill.gray{background:#edf1f6;color:#637087}
+.progress-wrap{display:flex;align-items:center;gap:18px;padding:7px 0 19px;border-bottom:1px solid var(--line)}
+.progress-ring{height:112px;width:112px;border-radius:50%;background:conic-gradient(var(--teal) 0 68%,#e8eef5 68% 100%);display:grid;place-items:center;flex-shrink:0}
+.progress-inner{height:84px;width:84px;background:white;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.progress-inner b{font-size:23px}.progress-inner span{font-size:9px;color:var(--muted)}
+.progress-info h3{font-size:16px;margin:0 0 7px}.progress-info p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 10px}
+.stage-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:18px}
+.stage{border:1px solid var(--line);border-radius:12px;padding:12px 10px;min-height:88px}
+.stage .dot{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;font-size:11px;margin-bottom:10px;font-weight:800}
+.stage b{display:block;font-size:11px;margin-bottom:5px}.stage span{font-size:10px;color:var(--muted)}
+.stage.done .dot{background:#dff8ef;color:#0b8d6d}.stage.current{border-color:#a5e7d8;background:#f2fffb}.stage.current .dot{background:var(--teal);color:white}
+.stage.wait .dot{background:#edf1f6;color:#8490a4}
+.donut-area{display:flex;align-items:center;gap:23px;padding:8px 0 15px}
+.donut{width:142px;height:142px;border-radius:50%;background:conic-gradient(#0f9d91 0 45%,#4263eb 45% 70%,#f2a93b 70% 88%,#e45b68 88% 100%);display:grid;place-items:center;flex-shrink:0}
+.donut-hole{width:91px;height:91px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.donut-hole b{font-size:24px}.donut-hole span{font-size:10px;color:var(--muted)}
+.legend{display:flex;flex-direction:column;gap:13px;width:100%}.legend-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;gap:8px}.legend-label{display:flex;align-items:center;gap:8px;color:#526078}.swatch{width:9px;height:9px;border-radius:3px;display:inline-block}
+.bar-chart{display:flex;align-items:flex-end;gap:13px;height:155px;padding:15px 6px 0;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to bottom,transparent 0,transparent 37px,#edf1f6 38px)}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:8px}
+.bar{width:min(34px,70%);border-radius:7px 7px 0 0;background:linear-gradient(180deg,#5c7cff,#4263eb);min-height:8px;position:relative}
+.bar.teal{background:linear-gradient(180deg,#63d9c6,#0f9d91)}.bar.amber{background:linear-gradient(180deg,#ffd58a,#f2a93b)}
+.bar-col span{font-size:10px;color:var(--muted);transform:translateY(20px)}
+.chart-labels{display:flex;justify-content:space-around;margin-top:22px;font-size:10px;color:var(--muted)}
+.table-panel{padding:0;overflow:hidden;margin-bottom:18px}.table-panel .panel-head{padding:21px 21px 0}
+.table-controls{display:flex;gap:8px;flex-wrap:wrap}
+.filter{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;font-size:11px;color:#5d6980}
+table{border-collapse:collapse;width:100%;text-align:left}th{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#8290a5;background:#f9fbfe;padding:13px 20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+td{padding:15px 20px;border-bottom:1px solid #edf0f5;font-size:12px}tr:last-child td{border-bottom:0}
+.company{display:flex;align-items:center;gap:10px;font-weight:700}.company-logo{height:32px;width:32px;border-radius:10px;display:grid;place-items:center;font-size:10px;font-weight:900;background:#e8edff;color:#4263eb}.company small{display:block;color:var(--muted);font-weight:400;font-size:10px;margin-top:4px}
+.owner{display:flex;align-items:center;gap:7px;color:#536078}.mini-avatar{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#f2e9ff;color:#805ad5;font-size:9px;font-weight:800}
+.action-link{border:0;background:none;color:var(--blue);font-size:11px;font-weight:800}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.queue{display:flex;flex-direction:column;gap:0}.queue-item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.queue-item:last-child{border:0;padding-bottom:0}
+.queue-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#fff2d9;color:#a46608;flex-shrink:0}
+.queue-copy{flex:1}.queue-copy b{display:block;font-size:12px;margin:1px 0 5px}.queue-copy p{font-size:11px;color:var(--muted);margin:0;line-height:1.5}
+.activity{display:flex;flex-direction:column;gap:15px}.activity-row{display:flex;gap:11px;font-size:11px;line-height:1.5}.activity-dot{width:9px;height:9px;border-radius:50%;background:var(--teal);margin-top:4px;flex-shrink:0;box-shadow:0 0 0 4px #e2f8f3}.activity-row p{margin:0;color:#526078}.activity-row b{color:var(--ink)}.activity-row small{display:block;color:#8b96a8;margin-top:3px}
+.view{display:none}.view.active{display:block}
+.toast{position:fixed;bottom:22px;right:22px;background:#172554;color:#fff;padding:13px 18px;border-radius:12px;font-size:12px;box-shadow:var(--shadow);display:none;z-index:10}
+@media(max-width:1100px){.app{grid-template-columns:210px 1fr}.metrics{grid-template-columns:repeat(2,1fr)}.grid-main{grid-template-columns:1fr}.bottom-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.app{grid-template-columns:1fr}.sidebar{padding:14px;gap:12px}.brand{padding:0 4px}.nav{display:grid;grid-template-columns:repeat(3,1fr)}.nav-label,.side-bottom{display:none}.nav button{padding:9px 6px;justify-content:center;font-size:10px;flex-direction:column;gap:4px}.topbar{padding:0 16px;height:65px}.search{width:135px}.content{padding:22px 14px}.heading-row{flex-direction:column}.metrics{gap:10px}.metric{padding:14px}.metric strong{font-size:24px}.stage-list{grid-template-columns:repeat(2,1fr)}.progress-wrap{align-items:flex-start;flex-direction:column}.donut-area{flex-direction:column}.table-panel{overflow-x:auto}table{min-width:760px}.panel{padding:16px}.table-panel .panel-head{padding:16px 16px 0}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">V</div><div>volopay <small>ONBOARDING HUB</small></div></div>
+  <div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="nav">
+      <button class="active" data-view="overview"><span class="ico">▦</span>Overview</button>
+      <button data-view="clients"><span class="ico">♙</span>Client pipeline</button>
+      <button data-view="verification"><span class="ico">✓</span>Verification review</button>
+      <button data-view="approvals"><span class="ico">⇧</span>Approvals</button>
+      <button data-view="documents"><span class="ico">▤</span>Documents</button>
+      <button data-view="activity"><span class="ico">◷</span>Activity log</button>
+    </nav>
+  </div>
+  <div>
+    <div class="nav-label">SUPPORT</div>
+    <nav class="nav"><button data-view="help"><span class="ico">?</span>Help centre</button></nav>
+  </div>
+  <div class="side-bottom"><strong>✦ Onboarding health</strong><span>4 items need attention today. Keep reviews moving to reduce time-to-live.</span></div>
+</aside>
+<main>
+  <header class="topbar">
+    <div class="crumb">Workspace&nbsp; / &nbsp;<strong id="crumb">Overview</strong></div>
+    <div class="top-actions"><input class="search" id="globalSearch" placeholder="⌕  Search clients..." /><button class="icon-btn" id="notifyBtn" title="Notifications">♧</button><div class="avatar">OB</div></div>
+  </header>
+  <div class="content">
+    <section class="view active" id="overview">
+      <div class="heading-row"><div><div class="eyebrow">CLIENT OPERATIONS / LIVE SNAPSHOT</div><h1>Onboarding command center</h1><p class="sub">A clearer view of client progress, verification queues and approval bottlenecks.</p></div><button class="primary" id="exportBtn">↓ Export report</button></div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top">Active onboardings <span class="metric-icon" style="background:#e8edff;color:#4263eb">♙</span></div><strong>128</strong><div class="metric-foot"><span class="positive">↑ 12%</span> vs. previous month</div></div>
+        <div class="metric"><div class="metric-top">Average time to live <span class="metric-icon" style="background:#dff8f2;color:#0f9d91">◷</span></div><strong>6.4 <small style="font-size:14px">days</small></strong><div class="metric-foot"><span class="positive">↓ 1.2 days</span> improvement</div></div>
+        <div class="metric"><div class="metric-top">Verification pending <span class="metric-icon" style="background:#fff2d9;color:#a46608">⌕</span></div><strong>23</strong><div class="metric-foot"><span style="color:#b87915;font-weight:800">8 overdue</span> need a review</div></div>
+        <div class="metric"><div class="metric-top">Approval success rate <span class="metric-icon" style="background:#f0e9ff;color:#805ad5">✓</span></div><strong>92.8%</strong><div class="metric-foot"><span class="positive">↑ 3.6%</span> this quarter</div></div>
+      </div>
+      <div class="grid-main">
+        <div class="panel">
+          <div class="panel-head"><div><h2>Onboarding journey</h2><div class="panel-desc">Stage completion across all active clients</div></div><span class="pill green">● Healthy trend</span></div>
+          <div class="progress-wrap"><div class="progress-ring"><div class="progress-inner"><b>68%</b><span>COMPLETION</span></div></div><div class="progress-info"><h3>Most clients are progressing well</h3><p>87 of 128 active clients have completed at least five onboarding stages. Document collection remains the most common delay.</p><span class="pill blue">Target: 75% completion</span></div></div>
+          <div class="stage-list">
+            <div class="stage done"><div class="dot">✓</div><b>Business details</b><span>128 complete</span></div>
+            <div class="stage done"><div class="dot">✓</div><b>Documents</b><span>111 complete</span></div>
+            <div class="stage current"><div class="dot">3</div><b>Verification</b><span>23 in review</span></div>
+            <div class="stage wait"><div class="dot">4</div><b>Go live</b><span>Upcoming</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h2>Client status mix</h2><div class="panel-desc">Current pipeline distribution</div></div><button class="action-link" data-jump="clients">View pipeline →</button></div>
+          <div class="donut-area"><div class="donut"><div class="donut-hole"><b>128</b><span>CLIENTS</span></div></div><div class="legend">
+            <div class="legend-row"><span class="legend-label"><i class="swatch" style="background:#0f9d91"></i>In progress</span><b>58 <small>(45%)</small></b></div>
+            <div class="legend-row"><span class="legend-label"><i class="swatch" style="background:#4263eb"></i>Verification</span><b>32 <small>(25%)</small></b></div>
+            <div class="legend-row"><span class="legend-label"><i class="swatch" style="background:#f2a93b"></i>Action needed</span><b>23 <small>(18%)</small></b></div>
+            <div class="legend-row"><span class="legend-label"><i class="swatch" style="background:#e45b68"></i>On hold</span><b>15 <small>(12%)</small></b></div>
+          </div></div>
+          <div style="background:#f5f8ff;border-radius:10px;padding:11px;font-size:11px;color:#526078">Insight: <b style="color:#18243a">18% of clients</b> are waiting on an action. Prioritise missing documents and overdue checks.</div>
+        </div>
+      </div>
+      <div class="grid-main">
+        <div class="panel">
+          <div class="panel-head"><div><h2>Weekly onboarding throughput</h2><div class="panel-desc">Clients moved to the next stage</div></div><span class="pill blue">Last 6 weeks</span></div>
+          <div class="bar-chart">
+            <div class="bar-col"><div class="bar" style="height:43%"></div><span>Wk 1</span></div><div class="bar-col"><div class="bar" style="height:58%"></div><span>Wk 2</span></div><div class="bar-col"><div class="bar teal" style="height:52%"></div><span>Wk 3</span></div><div class="bar-col"><div class="bar" style="height:73%"></div><span>Wk 4</span></div><div class="bar-col"><div class="bar teal" style="height:86%"></div><span>Wk 5</span></div><div class="bar-col"><div class="bar amber" style="height:68%"></div><span>Wk 6</span></div>
+          </div><div class="chart-labels"><span>Lower throughput</span><span>Higher throughput</span></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h2>Priority queue</h2><div class="panel-desc">Items that may slow down go-live</div></div><span class="pill amber">4 priorities</span></div>
+          <div class="queue">
+            <div class="queue-item"><div class="queue-icon">!</div><div class="queue-copy"><b>Overdue verification checks</b><p>8 clients have been waiting more than 48 hours.</p></div><button class="action-link" data-jump="verification">Review</button></div>
+            <div class="queue-item"><div class="queue-icon">▤</div><div class="queue-copy"><b>Missing documents</b><p>11 clients need to upload at least one file.</p></div><button class="action-link" data-jump="documents">Open</button></div>
+            <div class="queue-item"><div class="queue-icon">⇧</div><div class="queue-copy"><b>Pending approvals</b><p>6 onboarding cases await an internal decision.</p></div><button class="action-link" data-jump="approvals">Decide</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel table-panel">
+        <div class="panel-head"><div><h2>Recently updated clients</h2><div class="panel-desc">Latest client records and next action</div></div><button class="action-link" data-jump="clients">See all clients →</button></div>
+        <table><thead><tr><th>Client</th><th>Current stage</th><th>Owner</th><th>Updated</th><th>Status</th><th></th></tr></thead><tbody id="recentRows"></tbody></table>
+      </div>
+      <div class="bottom-grid">
+        <div class="panel"><div class="panel-head"><div><h2>Recent activity</h2><div class="panel-desc">Updates from the onboarding team</div></div><button class="action-link" data-jump="activity">Full log →</button></div><div class="activity">
+          <div class="activity-row"><i class="activity-dot"></i><div><p><b>Northstar Manufacturing</b> submitted business documents.</p><small>12 minutes ago · Documents</small></div></div>
+          <div class="activity-row"><i class="activity-dot" style="background:#4263eb;box-shadow:0 0 0 4px #e8edff"></i><div><p><b>BluePeak Logistics</b> moved to verification review.</p><small>45 minutes ago · Stage changed</small></div></div>
+          <div class="activity-row"><i class="activity-dot" style="background:#f2a93b;box-shadow:0 0 0 4px #fff2d9"></i><div><p><b>Maple & Co.</b> requested an additional document.</p><small>1 hour ago · Action required</small></div></div>
+        </div></div>
+        <div class="panel"><div class="panel-head"><div><h2>Operational targets</h2><div class="panel-desc">Performance against team goals</div></div><span class="pill green">This month</span></div>
+          <div style="margin:16px 0"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px"><b>First response within 1 day</b><span>88% / 90%</span></div><div style="height:7px;background:#edf1f6;border-radius:10px"><div style="height:100%;width:88%;background:#0f9d91;border-radius:10px"></div></div></div>
+          <div style="margin:18px 0"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px"><b>Verification within 48 hours</b><span>74% / 85%</span></div><div style="height:7px;background:#edf1f6;border-radius:10px"><div style="height:100%;width:74%;background:#4263eb;border-radius:10px"></div></div></div>
+          <div style="margin:18px 0 4px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px"><b>Client go-live satisfaction</b><span>96% / 95%</span></div><div style="height:7px;background:#edf1f6;border-radius:10px"><div style="height:100%;width:96%;background:#805ad5;border-radius:10px"></div></div></div>
+        </div>
+      </div>
+    </section>
+    <section class="view" id="clients">
+      <div class="heading-row"><div><div class="eyebrow">PIPELINE MANAGEMENT</div><h1>Client pipeline</h1><p class="sub">Track each organisation, its onboarding stage, ownership and next action.</p></div><button class="primary" id="addClient">＋ Add sample client</button></div>
+      <div class="metrics"><div class="metric"><div class="metric-top">Total clients</div><strong id="clientTotal">8</strong><div class="metric-foot">Sample pipeline records</div></div><div class="metric"><div class="metric-top">In progress</div><strong>4</strong><div class="metric-foot">Actively moving through stages</div></div><div class="metric"><div class="metric-top">At risk</div><strong>2</strong><div class="metric-foot">Follow-up recommended</div></div><div class="metric"><div class="metric-top">Completed this month</div><strong>14</strong><div class="metric-foot"><span class="positive">↑ 2</span> from last month</div></div></div>
+      <div class="panel table-panel"><div class="panel-head"><div><h2>All client records</h2><div class="panel-desc">Search and filter the sample data below.</div></div><div class="table-controls"><select class="filter" id="statusFilter"><option value="">All statuses</option><option>In progress</option><option>Verification</option><option>Action needed</option><option>On hold</option><option>Completed</option></select></div></div><table><thead><tr><th>Client</th><th>Current stage</th><th>Owner</th><th>Updated</th><th>Status</th><th>Next action</th></tr></thead><tbody id="clientRows"></tbody></table></div>
+    </section>
+    <section class="view" id="verification">
+      <div class="heading-row"><div><div class="eyebrow">RISK & COMPLIANCE</div><h1>Verification review</h1><p class="sub">Review KYC and business verification cases, prioritise ageing items, and record a decision.</p></div><button class="secondary" id="verificationExport">↓ Export queue</button></div>
+      <div class="metrics"><div class="metric"><div class="metric-top">In review</div><strong id="reviewCount">23</strong><div class="metric-foot">Cases in verification queue</div></div><div class="metric"><div class="metric-top">Overdue &gt; 48h</div><strong>8</strong><div class="metric-foot" style="color:#b93649">Needs prioritisation</div></div><div class="metric"><div class="metric-top">Approved today</div><strong>17</strong><div class="metric-foot"><span class="positive">↑ 4</span> vs yesterday</div></div><div class="metric"><div class="metric-top">Needs more info</div><strong>6</strong><div class="metric-foot">Client follow-up required</div></div></div>
+      <div class="panel table-panel"><div class="panel-head"><div><h2>Verification cases</h2><div class="panel-desc">Demonstration data only — not connected to live KYC systems.</div></div><select class="filter" id="reviewFilter"><option value="">All review statuses</option><option>Pending review</option><option>Approved</option><option>More info required</option><option>Escalated</option></select></div><table><thead><tr><th>Client / Case ID</th><th>Check type</th><th>Submitted</th><th>Risk</th><th>Review status</th><th>Decision</th></tr></thead><tbody id="verificationRows"></tbody></table></div>
+    </section>
+    <section class="view" id="approvals">
+      <div class="heading-row"><div><div class="eyebrow">INTERNAL CONTROL</div><h1>Approval centre</h1><p class="sub">A sample decision queue for onboarding exceptions, additional checks and go-live sign-off.</p></div><button class="secondary" id="approvalExport">↓ Export approvals</button></div>
+      <div class="metrics"><div class="metric"><div class="metric-top">Awaiting decision</div><strong id="pendingApprovals">6</strong><div class="metric-foot">Open approval requests</div></div><div class="metric"><div class="metric-top">Approved today</div><strong>12</strong><div class="metric-foot">Completed decisions</div></div><div class="metric"><div class="metric-top">Average decision time</div><strong>4.2h</strong><div class="metric-foot"><span class="positive">↓ 35 min</span> this week</div></div><div class="metric"><div class="metric-top">Escalated</div><strong>2</strong><div class="metric-foot">Manager attention</div></div></div>
+      <div class="panel table-panel"><div class="panel-head"><div><h2>Requests awaiting approval</h2><div class="panel-desc">Approve or return a request for more information.</div></div><span class="pill amber">Decision required</span></div><table><thead><tr><th>Request</th><th>Client</th><th>Requested by</th><th>Priority</th><th>Submitted</th><th>Decision</th></tr></thead><tbody id="approvalRows"></tbody></table></div>
+    </section>
+    <section class="view" id="documents">
+      <div class="heading-row"><div><div class="eyebrow">DOCUMENT OPERATIONS</div><h1>Documents & checklist</h1><p class="sub">Monitor requested files, missing evidence and document review status.</p></div><button class="primary" id="requestDoc">＋ Request document</button></div>
+      <div class="metrics"><div class="metric"><div class="metric-top">Documents received</div><strong>111</strong><div class="metric-foot">Across active client cases</div></div><div class="metric"><div class="metric-top">Awaiting upload</div><strong>11</strong><div class="metric-foot" style="color:#b87915">Client action required</div></div><div class="metric"><div class="metric-top">In document review</div><strong>9</strong><div class="metric-foot">Internal team review</div></div><div class="metric"><div class="metric-top">Rejected / re-upload</div><strong>3</strong><div class="metric-foot">Clarification needed</div></div></div>
+      <div class="panel table-panel"><div class="panel-head"><div><h2>Document checklist</h2><div class="panel-desc">Sample document status by client.</div></div><select class="filter" id="docFilter"><option value="">All document statuses</option><option>Submitted</option><option>Awaiting upload</option><option>In review</option><option>Re-upload requested</option></select></div><table><thead><tr><th>Client</th><th>Document type</th><th>Required by</th><th>Last updated</th><th>Status</th><th>Action</th></tr></thead><tbody id="documentRows"></tbody></table></div>
+    </section>
+    <section class="view" id="activity">
+      <div class="heading-row"><div><div class="eyebrow">AUDIT TRAIL</div><h1>Activity log</h1><p class="sub">A chronological view of key onboarding events and decisions.</p></div><button class="secondary" id="activityExport">↓ Export log</button></div>
+      <div class="panel"><div class="panel-head"><div><h2>Latest events</h2><div class="panel-desc">Sample events generated for this prototype.</div></div></div><div class="activity" id="fullActivity"></div></div>
+    </section>
+    <section class="view" id="help">
+      <div class="heading-row"><div><div class="eyebrow">SUPPORT & GUIDANCE</div><h1>Help centre</h1><p class="sub">Quick explanations for common onboarding tasks.</p></div></div>
+      <div class="bottom-grid"><div class="panel"><h2>What does “verification review” mean?</h2><p class="sub" style="margin-top:10px">The onboarding team or verification partner is checking the submitted business and identity details. If extra information is needed, the client should see a specific request.</p><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h2>When should I request more documents?</h2><p class="sub" style="margin-top:10px">Request only the evidence required to complete the current check. Include a clear reason and a next step so the client knows what to upload.</p></div><div class="panel"><h2>How are approval decisions handled?</h2><p class="sub" style="margin-top:10px">An authorised reviewer can approve a request, reject it with a reason, or return it for more information. Keep the decision and rationale in the audit trail.</p><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h2>Prototype data notice</h2><p class="sub" style="margin-top:10px">All client names, metrics and statuses on this page are fictional sample data for a dashboard demonstration. This is not a live Volopay system.</p></div></div>
+    </section>
+    <footer style="padding:24px 3px 0;color:#8b96a8;font-size:10px">VOLOPAY ONBOARDING COMMAND CENTER · Prototype dashboard · Sample data only</footer>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const clients=[
+ {name:"Northstar Manufacturing",code:"NM",stage:"Partner review",owner:"A. Sharma",initials:"AS",updated:"12 min ago",status:"Verification",next:"Review partner result"},
+ {name:"BluePeak Logistics",code:"BL",stage:"Verification",owner:"R. Mehta",initials:"RM",updated:"45 min ago",status:"In progress",next:"Complete verification"},
+ {name:"Maple & Co.",code:"MC",stage:"Additional documents",owner:"S. Iyer",initials:"SI",updated:"1 hour ago",status:"Action needed",next:"Upload proof of address"},
+ {name:"Cedar Retail Group",code:"CR",stage:"Business details",owner:"K. Rao",initials:"KR",updated:"2 hours ago",status:"In progress",next:"Submit company details"},
+ {name:"Orbit Healthcare",code:"OH",stage:"Compliance review",owner:"M. Das",initials:"MD",updated:"3 hours ago",status:"On hold",next:"Resolve compliance query"},
+ {name:"Summit Tech Labs",code:"ST",stage:"Platform access",owner:"P. Nair",initials:"PN",updated:"Today",status:"In progress",next:"Create platform access"},
+ {name:"Amberfield Foods",code:"AF",stage:"User KYC",owner:"T. Roy",initials:"TR",updated:"Today",status:"Verification",next:"Review KYC submission"},
+ {name:"Pinecrest Energy",code:"PE",stage:"Go live",owner:"D. Shah",initials:"DS",updated:"Yesterday",status:"Completed",next:"Onboarding complete"}
+];
+const reviews=[
+ {client:"Northstar Manufacturing",id:"VR-1048",type:"Business verification",submitted:"16 Oct",risk:"Low",status:"Pending review"},
+ {client:"BluePeak Logistics",id:"VR-1047",type:"Director KYC",submitted:"16 Oct",risk:"Medium",status:"Pending review"},
+ {client:"Maple & Co.",id:"VR-1045",type:"Address verification",submitted:"15 Oct",risk:"Medium",status:"More info required"},
+ {client:"Orbit Healthcare",id:"VR-1041",type:"Enhanced due diligence",submitted:"14 Oct",risk:"High",status:"Escalated"},
+ {client:"Amberfield Foods",id:"VR-1039",type:"User KYC",submitted:"14 Oct",risk:"Low",status:"Pending review"},
+ {client:"Cedar Retail Group",id:"VR-1037",type:"Business verification",submitted:"13 Oct",risk:"Low",status:"Approved"}
+];
+const approvals=[
+ {request:"Go-live sign-off",client:"Pinecrest Energy",by:"D. Shah",priority:"Normal",date:"Today"},
+ {request:"Additional document exception",client:"Maple & Co.",by:"S. Iyer",priority:"High",date:"Today"},
+ {request:"Enhanced review escalation",client:"Orbit Healthcare",by:"M. Das",priority:"Urgent",date:"Yesterday"},
+ {request:"Director KYC override",client:"BluePeak Logistics",by:"R. Mehta",priority:"High",date:"Yesterday"},
+ {request:"Business profile correction",client:"Cedar Retail Group",by:"K. Rao",priority:"Normal",date:"16 Oct"},
+ {request:"Platform access approval",client:"Summit Tech Labs",by:"P. Nair",priority:"Normal",date:"16 Oct"}
+];
+const docs=[
+ {client:"Northstar Manufacturing",type:"Certificate of incorporation",by:"18 Oct",updated:"Today",status:"Submitted"},
+ {client:"Maple & Co.",type:"Proof of business address",by:"17 Oct",updated:"15 Oct",status:"Awaiting upload"},
+ {client:"BluePeak Logistics",type:"Director identity document",by:"18 Oct",updated:"Today",status:"In review"},
+ {client:"Orbit Healthcare",type:"Ownership declaration",by:"16 Oct",updated:"14 Oct",status:"Re-upload requested"},
+ {client:"Cedar Retail Group",type:"Company registration",by:"18 Oct",updated:"Today",status:"Submitted"},
+ {client:"Amberfield Foods",type:"User KYC document",by:"18 Oct",updated:"Today",status:"In review"},
+ {client:"Summit Tech Labs",type:"Bank account confirmation",by:"19 Oct",updated:"Yesterday",status:"Awaiting upload"}
+];
+const activityItems=[
+ ["Northstar Manufacturing","submitted business documents.","12 minutes ago · Documents"],
+ ["BluePeak Logistics","moved to verification review.","45 minutes ago · Stage changed"],
+ ["Maple & Co.","was asked to provide proof of address.","1 hour ago · Client action"],
+ ["Pinecrest Energy","received a go-live sign-off request.","2 hours ago · Approval"],
+ ["Orbit Healthcare","was escalated for enhanced review.","Yesterday · Compliance"],
+ ["Summit Tech Labs","completed platform access setup.","Yesterday · Platform access"]
+];
+function statusPill(s){let cls=({"In progress":"green","Verification":"blue","Action needed":"amber","On hold":"red","Completed":"green","Pending review":"blue","Approved":"green","More info required":"amber","Escalated":"red","Submitted":"green","Awaiting upload":"amber","In review":"blue","Re-upload requested":"red","Low":"green","Medium":"amber","High":"red","Urgent":"red","Normal":"gray"})[s]||"gray";return `<span class="pill ${cls}">${s}</span>`}
+function logo(c){return `<div class="company-logo">${c.code}</div>`}
+function clientRow(c){return `<tr><td><div class="company">${logo(c)}<div>${c.name}<small>${c.code}-2026</small></div></div></td><td>${c.stage}</td><td><div class="owner"><span class="mini-avatar">${c.initials}</span>${c.owner}</div></td><td>${c.updated}</td><td>${statusPill(c.status)}</td><td><button class="action-link" onclick="showToast('Opened sample record for ${c.name}')">View details →</button></td></tr>`}
+function renderClients(){document.getElementById("clientRows").innerHTML=clients.map(clientRow).join("");document.getElementById("recentRows").innerHTML=clients.slice(0,4).map(clientRow).join("");document.getElementById("clientTotal").textContent=clients.length}
+function renderReviews(){let f=document.getElementById("reviewFilter")?.value||"";document.getElementById("verificationRows").innerHTML=reviews.filter(r=>!f||r.status===f).map((r,i)=>`<tr><td><div class="company">${r.client}<small>${r.id}</small></div></td><td>${r.type}</td><td>${r.submitted}</td><td>${statusPill(r.risk)}</td><td>${statusPill(r.status)}</td><td><button class="action-link" onclick="reviewAction(${i})">Review →</button></td></tr>`).join("")}
+function reviewAction(i){const r=reviews[i];const choice=prompt(`Case ${r.id} — ${r.client}\nType a decision: approve, more info, or escalate`);if(!choice)return;let c=choice.toLowerCase();if(c.includes("approve"))r.status="Approved";else if(c.includes("more"))r.status="More info required";else if(c.includes("escal"))r.status="Escalated";else{showToast("Please enter approve, more info, or escalate.");return}renderReviews();showToast(`Decision saved: ${r.status} (sample only)`)}
+function renderApprovals(){document.getElementById("approvalRows").innerHTML=approvals.map((a,i)=>`<tr><td><b>${a.request}</b></td><td>${a.client}</td><td>${a.by}</td><td>${statusPill(a.priority)}</td><td>${a.date}</td><td><button class="action-link" onclick="approvalAction(${i})">Decide →</button></td></tr>`).join("");document.getElementById("pendingApprovals").textContent=approvals.length}
+function approvalAction(i){const a=approvals[i];const choice=prompt(`${a.request} — ${a.client}\nType: approve, return, or reject`);if(!choice)return;const c=choice.toLowerCase();if(c.includes("approve")||c.includes("return")||c.includes("reject")){approvals.splice(i,1);renderApprovals();showToast(`Decision recorded for ${a.client} (sample only)`)}else showToast("Please enter approve, return, or reject.")}
+function renderDocs(){let f=document.getElementById("docFilter")?.value||"";document.getElementById("documentRows").innerHTML=docs.filter(d=>!f||d.status===f).map((d,i)=>`<tr><td><b>${d.client}</b></td><td>${d.type}</td><td>${d.by}</td><td>${d.updated}</td><td>${statusPill(d.status)}</td><td><button class="action-link" onclick="docAction(${i})">Update →</button></td></tr>`).join("")}
+function docAction(i){const d=docs[i];const choice=prompt(`${d.client} — ${d.type}\nSet status: submitted, awaiting upload, in review, or re-upload requested`);if(!choice)return;let v=choice.toLowerCase();let found=["submitted","awaiting upload","in review","re-upload requested"].find(s=>v===s||v.includes(s));if(found){d.status=found[0].toUpperCase()+found.slice(1);renderDocs();showToast("Document status updated (sample only)")}else showToast("Status not recognised.")}
+function renderActivity(){document.getElementById("fullActivity").innerHTML=activityItems.map(a=>`<div class="activity-row"><i class="activity-dot"></i><div><p><b>${a[0]}</b> ${a[1]}</p><small>${a[2]}</small></div></div>`).join("")}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display="none",3200)}
+function navigate(id){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));document.getElementById("crumb").textContent=({overview:"Overview",clients:"Client pipeline",verification:"Verification review",approvals:"Approvals",documents:"Documents",activity:"Activity log",help:"Help centre"})[id]||"Overview";window.scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.view)));
+document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.jump)));
+document.getElementById("reviewFilter").addEventListener("change",renderReviews);document.getElementById("docFilter").addEventListener("change",renderDocs);
+document.getElementById("statusFilter").addEventListener("change",()=>{const f=document.getElementById("statusFilter").value;document.getElementById("clientRows").innerHTML=clients.filter(c=>!f||c.status===f).map(clientRow).join("")});
+document.getElementById("globalSearch").addEventListener("input",e=>{const q=e.target.value.toLowerCase();const view=document.querySelector(".view.active");if(view.id==="clients"){document.getElementById("clientRows").innerHTML=clients.filter(c=>(c.name+c.stage+c.owner+c.status).toLowerCase().includes(q)).map(clientRow).join("")}else if(q){navigate("clients");document.getElementById("globalSearch").value=q;document.getElementById("clientRows").innerHTML=clients.filter(c=>(c.name+c.stage+c.owner+c.status).toLowerCase().includes(q)).map(clientRow).join("")}});
+document.getElementById("addClient").addEventListener("click",()=>{const name=prompt("Enter a sample client name:");if(!name)return;const code=name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();clients.unshift({name,code,stage:"Business details",owner:"O. Banerjee",initials:"OB",updated:"Just now",status:"In progress",next:"Complete business profile"});renderClients();showToast("Sample client added to this session.")});
+document.getElementById("requestDoc").addEventListener("click",()=>{const client=prompt("Client name for sample document request:");if(!client)return;const type=prompt("Document requested:");if(!type)return;docs.unshift({client,type,by:"20 Oct",updated:"Just now",status:"Awaiting upload"});renderDocs();showToast("Sample document request added.")});
+function exportCSV(filename,rows){const csv=rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);showToast("CSV report exported.")}
+document.getElementById("exportBtn").addEventListener("click",()=>exportCSV("onboarding-summary.csv",[["Metric","Value"],["Active onboardings",128],["Average time to live","6.4 days"],["Verification pending",23],["Approval success rate","92.8%"]]));
+document.getElementById("verificationExport").addEventListener("click",()=>exportCSV("verification-queue.csv",[["Client","Case ID","Type","Submitted","Risk","Status"],...reviews.map(r=>[r.client,r.id,r.type,r.submitted,r.risk,r.status])]));
+document.getElementById("approvalExport").addEventListener("click",()=>exportCSV("approval-queue.csv",[["Request","Client","Requested by","Priority","Date"],...approvals.map(a=>[a.request,a.client,a.by,a.priority,a.date])]));
+document.getElementById("activityExport").addEventListener("click",()=>exportCSV("activity-log.csv",[["Client","Event","When"],...activityItems]));
+document.getElementById("notifyBtn").addEventListener("click",()=>showToast("You have 4 priority items in the sample queue."));
+renderClients();renderReviews();renderApprovals();renderDocs();renderActivity();
+</script>
+</body>
+</html>
